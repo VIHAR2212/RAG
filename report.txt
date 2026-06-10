@@ -1,0 +1,21 @@
+RAG stands for Retrieval Augmented Generation. Instead of the AI just answering from whatever it learned during training, it first searches for relevant information from a knowledge base and then gives the answer.
+
+Think of it like this — if I ask you a question in exam and you don't remember the answer, you can't open the textbook right? But in RAG, the AI is allowed to "open the textbook" before answering. That textbook can be any documents, PDFs, websites, databases — whatever you give it.
+
+The normal problem with AI models like ChatGPT is that they have a training cutoff, meaning they don't know anything after a certain date. Also sometimes they just make up answers which sounds correct but is actually wrong, this is called hallucination. RAG solves both these problems.
+
+How it works is simple — first the documents are converted into embeddings (numbers that represent meaning) and stored in a vector database. Then when user asks a question, that question is also converted to embedding and the most similar document chunks are fetched. Finally those chunks are given to the AI along with the question and it generates the answer based on that retrieved content.
+
+Companies like Microsoft use this in Copilot, Perplexity AI basically runs entirely on RAG, and customer support bots use it to answer from company documentation without hallucinating random stuff.
+
+---
+
+My idea is ExamRAG — a RAG based study assistant made for engineering students.
+
+The problem is when we prepare for exams, our resources are all over the place — syllabus PDFs, previous year papers, lab manuals, teacher notes. And if we ask ChatGPT something from our syllabus, half the time it gives wrong answers because our college content is not in its training data at all.
+
+So what ExamRAG does is you upload your own subject materials and it builds a personal knowledge base. Now when you ask something like "explain infix to postfix with example" it will search YOUR notes first and answer based on that. Not some random internet explanation.
+
+There is also a PYQ mode where you can ask things like "what topics came most in last 5 years of Data Structures exam" and it will scan through all your question papers and give a pattern analysis.
+
+This hasn't been done widely because most ed-tech platforms just use generic AI without connecting it to the student's actual syllabus. RAG makes this possible without retraining any model — you just plug in the documents and it works. Tech stack would be Next.js, LangChain, ChromaDB and Claude API.

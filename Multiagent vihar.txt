@@ -1,0 +1,19 @@
+Single-Agent vs Multi-Agent Systems
+
+A single agent system is basically one AI doing everything on its own. You give it a task, it thinks, it acts, it gives output. Simple but limited. If the task is too big or needs multiple types of work at the same time, one agent starts struggling.
+
+Multi-agent systems solve this by having multiple agents working together. Each agent has a specific role and they communicate with each other to complete a bigger task. Think of it like a team — one person doesn't do everything, different people handle different parts and then the results are combined.
+
+Why agents collaborate is pretty straightforward — some tasks are too complex for one agent, some parts can be done in parallel to save time, and specialization gives better results. A research agent will do research better than a general agent trying to do everything.
+
+
+Core roles in a multi-agent system are usually Supervisor and Worker. The Supervisor agent is the brain — it receives the main task, breaks it into smaller subtasks, decides which worker agent should do what, and then collects all results at the end. Worker agents just focus on their assigned job — one might do web search, another might summarize, another might verify facts.
+
+The messaging flow between agents works like this — user gives task to supervisor, supervisor sends instructions to workers through a message passing system, workers complete their subtasks and send results back, supervisor combines everything and gives final output to user. This whole process is called the delegation and coordination flow.
+
+
+For a practical example, imagine building a GitHub research tool. The supervisor receives a query like "explain what this repo does". It then delegates to three workers — a research agent that reads the README and code files, a summarization agent that condenses the findings, and a verification agent that checks if the summary is accurate. Each worker uses tools like file reader or web search to do their job. The supervisor waits for all three to finish, combines the outputs, and returns one clean answer.
+
+Tools are a big part of this — agents are not just talking, they are actually doing things. A worker agent might call a search API, read a file, run code, or query a database. The tool use is what makes agents actually useful instead of just generating text.
+
+The whole point of this architecture is that complex tasks get broken down, parallelized, and handled by specialized agents — which gives better, faster, and more reliable results than any single agent could produce alone.

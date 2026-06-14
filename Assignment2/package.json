@@ -1,0 +1,24 @@
+{
+  "name": "langchain-ai-assistant",
+  "version": "1.0.0",
+  "description": "my langchain project for edquest assignment",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "chain": "ts-node src/chain.ts",
+    "agent": "ts-node src/agent.ts",
+    "memory": "ts-node src/memory.ts"
+  },
+  "dependencies": {
+    "@langchain/groq": "^0.1.0",
+    "@langchain/core": "^0.3.0",
+    "langchain": "^0.3.0",
+    "langsmith": "^0.1.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^20.0.0"
+  }
+}

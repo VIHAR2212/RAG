@@ -1,22 +1,3 @@
-/**
- * supportAgent.ts — LangChain Agent Demo
- *
- * WHAT THIS SHOWS:
- *  1. How an Agent differs from a Chain
- *     • Chain: fixed, linear flow (A → B → C always)
- *     • Agent: uses the LLM to DECIDE which tool to call, based on the query
- *
- *  2. ReAct Agent pattern: Reason → Act → Observe → Repeat
- *     The agent "thinks" about what to do, calls a tool, reads the result,
- *     then decides the next step — all autonomously.
- *
- *  3. AgentExecutor: the runtime that manages the tool-call loop
- *
- * USE CASE:
- *  A study helper that can explain concepts, write code snippets,
- *  calculate things, and create study plans — all from natural language.
- */
-
 import * as dotenv from "dotenv";
 dotenv.config();
 

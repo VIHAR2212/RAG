@@ -1,0 +1,95 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+import { RunnableSequence } from "@langchain/core/runnables";
+import { getModel } from "../utils/llm";
+
+// ── 1. Prompt Template ──────────────────────────────────────────────────────
+// Placeholders ({topic}, {level}) are filled at runtime.
+const explainerPrompt = ChatPromptTemplate.fromMessages([
+  [
+    "system",
+    `You are a concise, friendly tech educator.
+Explain concepts clearly with a real-world analogy.
+Always end with one practical next step the learner can take.`,
+  ],
+  [
+    "human",
+    `Explain "{topic}" to a {level} developer in 3–4 sentences.`,
+  ],
+]);
+
+// ── 2. Output parser ────────────────────────────────────────────────────────
+const parser = new StringOutputParser();
+
+// ── 3. Chain via LCEL pipe ──────────────────────────────────────────────────
+// pipe() = prompt → model → parser
+// Each step's output feeds the next automatically.
+export function buildExplainerChain() {
+  const model = getModel(0.5);
+  return RunnableSequence.from([explainerPrompt, model, parser]);
+}
+
+// ── 4. Document Q&A chain ───────────────────────────────────────────────────
+const docQAPrompt = ChatPromptTemplate.fromMessages([
+  [
+    "system",
+    `You are a helpful assistant that answers questions based on provided context.
+If the answer is not in the context, say "I don't have enough information to answer that."
+Be concise and factual.`,
+  ],
+  [
+    "human",
+    `Context:
+{context}
+
+Question: {question}`,
+  ],
+]);
+
+export function buildDocQAChain() {
+  const model = getModel(0.2); // lower temp → more factual
+  return RunnableSequence.from([docQAPrompt, model, parser]);
+}
+
+// ── Demo runner ─────────────────────────────────────────────────────────────
+async function runChainDemo() {
+  console.log("\n═══════════════════════════════════════");
+  console.log("  🔗 LANGCHAIN CHAINS DEMO");
+  console.log("═══════════════════════════════════════\n");
+
+  // Demo 1 — Explainer chain
+  const explainerChain = buildExplainerChain();
+  console.log("📌 Demo 1: Explainer Chain");
+  console.log("──────────────────────────");
+  const explanation = await explainerChain.invoke({
+    topic: "LangChain",
+    level: "beginner",
+  });
+  console.log("Response:", explanation);
+
+  // Demo 2 — Document Q&A chain
+  const docChain = buildDocQAChain();
+  console.log("\n📌 Demo 2: Document Q&A Chain");
+  console.log("──────────────────────────────");
+  const context = `
+    LangChain is an open-source framework for building applications powered by large language models.
+    It provides abstractions for prompts, chains, agents, and memory.
+    LangSmith is LangChain's observability platform for tracing, debugging, and evaluating LLM apps.
+    LCEL (LangChain Expression Language) uses the pipe operator to compose chains declaratively.
+  `;
+  const answer = await docChain.invoke({
+    context,
+    question: "What does LangSmith do?",
+  });
+  console.log("Response:", answer);
+
+  console.log("\n✅ Chain demos complete.\n");
+}
+
+// Run if called directly
+if (require.main === module) {
+  runChainDemo().catch(console.error);
+}
